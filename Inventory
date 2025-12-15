@@ -1,1 +1,174 @@
 
+<h1><strong>Ansible Inventory – Complete Guide</strong></h1>
+
+<h2><strong>What is Ansible Inventory?</strong></h2>
+An **Ansible Inventory** is a file that defines **which hosts Ansible manages** and **how it connects to them**.
+
+Without an inventory, Ansible has **no target machines** to run tasks on.
+
+---
+
+<h2><strong>Types of Ansible Inventory</strong></h2>
+
+#<h2><strong>1. Static Inventory</strong></h2>
+
+* Manually written file
+* Used for learning or small environments
+* Does not scale well
+
+#<h2><strong>2. Dynamic Inventory</strong></h2>
+
+* Automatically generated (AWS, Azure, GCP)
+* Required for real-world DevOps projects
+* Handles changing IPs and autoscaling
+
+---
+
+<h2><strong>Default Inventory Location</strong></h2>
+```bash
+/etc/ansible/hosts
+```
+
+Best practice is to use a **project-specific inventory file** instead of the default.
+
+```bash
+ansible-playbook -i inventory.ini playbook.yml
+```
+
+---
+
+<h2><strong>Basic Inventory (INI Format)</strong></h2>
+
+```ini
+[web]
+192.168.1.10
+192.168.1.11
+
+[db]
+192.168.1.20
+```
+
+* `web` and `db` are **groups**
+* IP addresses are **managed nodes**
+
+---
+
+<h2><strong>Inventory with SSH User and Key</strong></h2>
+
+```ini
+[web]
+192.168.1.10 ansible_user=ubuntu ansible_ssh_private_key_file=/home/ubuntu/key.pem
+```
+
+This is required when:
+
+* You are using cloud servers
+* Password authentication is disabled
+
+---
+
+<h2><strong>Group Variables (Recommended)</strong></h2>
+
+```ini
+[web]
+192.168.1.10
+192.168.1.11
+
+[web:vars]
+ansible_user=ubuntu
+ansible_ssh_private_key_file=/home/ubuntu/key.pem
+```
+
+This avoids repeating variables for every host.
+
+---
+
+<h2><strong>Inventory Using Hostnames</strong></h2>
+
+```ini
+[app]
+app01.example.com
+app02.example.com
+```
+
+DNS resolution must work, otherwise Ansible will fail to connect.
+
+---
+
+<h2><strong>Inventory in YAML Format</strong></h2>
+
+```yaml
+all:
+  children:
+    web:
+      hosts:
+        192.168.1.10:
+        192.168.1.11:
+    db:
+      hosts:
+        192.168.1.20:
+```
+
+YAML inventory is preferred when using **dynamic inventory plugins**.
+
+---
+
+<h2><strong>Checking Inventory</strong></h2>
+
+Always verify your inventory before running playbooks:
+
+```bash
+ansible-inventory -i inventory.ini --list
+```
+
+If this output is incorrect, your playbook execution will fail.
+
+---
+
+<h2><strong>Using Inventory in a Playbook</strong></h2>
+
+```yaml
+- hosts: web
+  become: true
+  tasks:
+    - name: Install nginx
+      apt:
+        name: nginx
+        state: present
+```
+
+The `hosts` value must match a group defined in the inventory.
+
+---
+
+<h2><strong>Dynamic Inventory (AWS Example)</strong></h2>
+
+Dynamic inventory is required when:
+
+* EC2 IPs change
+* Auto Scaling Groups are used
+
+Common tools:
+
+* `aws_ec2` Ansible inventory plugin
+* Terraform with Ansible
+
+---
+
+<h2><strong>Common Mistakes</strong></h2>
+
+* Forgetting `-i inventory`
+* Using wrong SSH user
+* Incorrect PEM file permissions (should be `400`)
+* Group name mismatch between inventory and playbook
+* Assuming Ansible auto-detects hosts
+
+---
+
+<h2><strong>Conclusion</strong></h2>
+
+Ansible Inventory is the **foundation of automation**.
+
+If inventory is incorrect, **nothing works** — playbooks, roles, or deployments.
+
+Master inventory before moving to advanced Ansible concepts.
