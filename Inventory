@@ -1,10 +1,108 @@
-STATIC INVENTORY – YAML FORMAT
+# INVENTORY
+
+An **Ansible inventory file** contains the list of machines that Ansible manages.  
+These machines are known as *managed nodes*.
+
+The inventory file tells Ansible:
+- Where to run tasks  
+- How to connect to systems  
+- How to group hosts  
+- How to define connection variables  
+
+---
+
+## TYPES OF INVENTORIES
+
+### 1. STATIC INVENTORY
+
+Static inventory is a manually created file where hostnames or IP addresses are written directly.
+
+It is mostly used for:
+- Small setups  
+- Practice environments  
+- Systems where servers rarely change  
+
+Static inventory files are commonly written in:
+- **INI format**
+- **YAML format**
+
+---
+
+### STATIC INVENTORY – INI FORMAT
+
+```ini
+[web]
+192.168.1.10
+192.168.1.11
+
+[db]
+192.168.1.20
+
+[all:vars]
+ansible_user=ec2-user
+ansible_ssh_private_key_file=key.pem
+
+
+Key Points
+
+Hosts are grouped using square brackets [group_name]
+
+IP addresses or hostnames are listed under groups
+
+Variables can be defined globally using all:vars
+
+### STATIC INVENTORY – YAML FORMAT
+
 all:
   children:
-    webservers:
+    web:
       hosts:
         web1:
           ansible_host: 192.168.1.10
         web2:
           ansible_host: 192.168.1.11
-    dbservers:
+    db:
+      hosts:
+        db1:
+          ansible_host: 192.168.1.20
+  vars:
+    ansible_user: ec2-user
+    ansible_ssh_private_key_file: key.pem
+
+DYNAMIC INVENTORY
+
+Dynamic inventory is used when servers are created and destroyed frequently, especially in cloud platforms like AWS.
+
+Instead of maintaining a manual list:
+
+Ansible automatically fetches host information
+
+Uses inventory plugins or scripts
+
+Best suited for:
+
+Cloud environments
+
+Auto-scaling setups
+
+WHY INVENTORY IS IMPORTANT
+
+Defines which machines Ansible controls
+
+Organizes hosts into logical groups
+
+Stores connection and authentication details
+
+Enables scalable automation
+
+BEST PRACTICES
+
+Use groups instead of single hosts
+
+Store secrets securely using Ansible Vault
+
+Use YAML for complex inventories
+
+Prefer dynamic inventory for cloud environments
+
+AD-HOC COMMAND EXAMPLES
