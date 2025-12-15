@@ -2,24 +2,15 @@
 
 An Ansible inventory file contains the list of machines that Ansible manages. These machines are known as *managed nodes*. The inventory file tells Ansible where to run tasks and how to connect to those systems. It also allows grouping of hosts and defining connection variables.
 
----
-
 ## TYPES OF INVENTORY
 
 Ansible mainly supports two types of inventory based on infrastructure needs:
-
 - **Static Inventory**
 - **Dynamic Inventory**
 
----
-
 ## STATIC INVENTORY
 
-Static inventory is a manually created file where hostnames or IP addresses are written directly. It is mostly used for small setups, practice environments, or systems where servers rarely change.
-
-Static inventory files are commonly written in **INI** or **YAML** format.
-
----
+Static inventory is a manually created file where hostnames or IP addresses are written directly. It is mostly used for small setups, practice environments, or systems where servers rarely change. Static inventory files are commonly written in **INI** or **YAML** format.
 
 ### STATIC INVENTORY – INI FORMAT
 
