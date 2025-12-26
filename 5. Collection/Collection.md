@@ -120,13 +120,3 @@ Requires Ansible Galaxy token.
 
 
 
-## Collections vs Roles (Quick Comparison)
-
-| Aspect           | Role    | Collection                        |  
-| ---------------- | ------- | --------------------------------- |  
-| Scope            | Limited | Broad (roles + modules + plugins) |  
-| Versioning       | Weak    | Strong                            |  
-| Reusability      | Medium  | High                              |  
-| Enterprise Ready | ❌       | ✅                                 |
-
-
